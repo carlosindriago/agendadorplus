@@ -6,8 +6,10 @@ import (
 
 	"github.com/carlosindriago/agendadorplus/internal/domain"
 	"github.com/carlosindriago/agendadorplus/internal/ports"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 // AuthUseCase handles authentication operations.
@@ -63,16 +65,13 @@ func (uc *AuthUseCase) Login(ctx context.Context, email, password string) (strin
 
 // generateJWT creates a signed JWT token for the given user.
 func generateJWT(userID, tenantID uuid.UUID, secret []byte) (string, error) {
-	// Import jwt in the actual implementation
-	// For now, we use golang-jwt/jwt/v5
-	claims := map[string]interface{}{
+	claims := jwt.MapClaims{
 		"sub":       userID.String(),
 		"tenant_id": tenantID.String(),
-		"iat":       nil, // Will be set to time.Now().Unix()
-		"exp":       nil, // Will be set to time.Now().Add(24*time.Hour).Unix()
+		"iat":       time.Now().Unix(),
+		"exp":       time.Now().Add(24 * time.Hour).Unix(),
 	}
-	_ = claims // Placeholder — full implementation with jwt.NewWithClaims below
 
-	// TODO: Implement with golang-jwt/jwt/v5 after go mod tidy
-	return "placeholder-jwt-token", nil
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(secret)
 }

@@ -49,8 +49,8 @@ type ServiceRepository interface {
 	// List returns all active services for a tenant.
 	List(ctx context.Context, tenantID uuid.UUID) ([]domain.Service, error)
 
-	// GetByID returns a service by its ID.
-	GetByID(ctx context.Context, id uuid.UUID) (*domain.Service, error)
+	// GetServiceByID returns a service by its ID.
+	GetServiceByID(ctx context.Context, id uuid.UUID) (*domain.Service, error)
 
 	// Create creates a new service.
 	Create(ctx context.Context, service *domain.Service) error
@@ -64,8 +64,8 @@ type UserRepository interface {
 	// FindByEmail returns a user by email. Returns domain.ErrNotFound if not found.
 	FindByEmail(ctx context.Context, email string) (*domain.User, error)
 
-	// GetByID returns a user by ID. Returns domain.ErrNotFound if not found.
-	GetByID(ctx context.Context, id uuid.UUID) (*domain.User, error)
+	// GetUserByID returns a user by ID. Returns domain.ErrNotFound if not found.
+	GetUserByID(ctx context.Context, id uuid.UUID) (*domain.User, error)
 }
 
 // Notifier defines the contract for sending notifications.
